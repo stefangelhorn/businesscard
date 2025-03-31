@@ -3,54 +3,95 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.gridcontainer{
+
+/* --> Flexibles Layout für bessere Skalierbarkeit
+Du hast feste Breiten (600px, 400px, 200px, 300px) – das macht die Card auf kleinen oder großen Bildschirmen wenig anpassbar.
+*/
+.gridcontainer {
     display: grid;
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     height: 300px;
-    grid-template: 300px / 400px 200px;
+    grid-template-columns: 2fr 1fr; /* statt feste Pixel */
     border: 1px solid blue;
     border-radius: 5px;
     grid-template-areas: "dates image";
 }
 
-.dates{
+/* --> Positionierungen vermeiden, wenn nicht nötig
+Deine position: relative; bottom: ... Pushes wirken eher wie Workarounds.
+Besser wäre es, einfach über margin oder gap im Flexbox-Container zu arbeiten:
+*/
+
+
+.dates {
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
     flex-direction: column;
+    justify-content: space-between; /* oder gap: ... */
     background-color: gold;
     padding: 20px;
     grid-area: dates;
+    gap: 5px; /* optional */
 }
 
-.dates > h2{
-    position: relative;
-    bottom: 20px;
-}
-
-.dates > p{
-    position: relative;
-    bottom: 30px;
-    margin: 10px 0;
-}
-
-.dates > a{
-    position: relative;
-    bottom: 20px;
-    color: black;
-    text-decoration: none;
-}
-
-.phone{
-    position: relative;
-    bottom: 20px;
+.dates h2, .dates p, .dates a, .phone {
+    position: static; /* relative entfernen */
+    margin: 0; /* saubere Abstände */
 }
 
 .image{
     grid-area: image;
 }
 
-img{
-    width: 200px;
-    height: 100%;
+/* --> Bild anpassen
+Statt die Höhe mit 100% zu erzwingen, wäre es schöner, das Bild an den Container anzupassen ohne es zu verzerren.
+*/
+
+img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }
+
+
+.dates a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.phone {
+    font-style: italic;
+    color: #333;
+}
+
+
+/* --> Bonus-Tipp
+Wenn du die Karte responsive machen willst (z.B. auf mobilen Geräten), kannst du auch eine einfache Media Query einsetzen:
+*/
+
+@media (max-width: 640px) {
+    .gridcontainer {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "image"
+            "dates";
+        height: auto;
+    }
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+
+/* --> Fazit:
+
+    Der Code ist funktional ✅
+
+    Kleine Layout-Verbesserungen machen ihn flexibler und sauberer
+
+    Positionierungen mit bottom würde ich lieber durch gap, margin und space-between lösen
+
+    Responsiveness wäre ein großes Plus für echte Projekte
+*/
